@@ -17,16 +17,17 @@ app.use("/customer/auth/*", function auth(req, res, next) {
             token,
             "access",
             (err, user) => {
-                if (err) {
-                    res.status(401).json({ message: "Not authenticated" });
-                } else {
+                if (!err) {
                     req.user = user;
                     next();
+
+                } else {
+                    return res.status(401).json({ message: "Not authenticated" });
                 }
             }
         )
     } else {
-        res.status(401).json({ message: "Not authenticated" });
+        return res.status(401).json({ message: "User Not logged in" });
     }
 });
 
